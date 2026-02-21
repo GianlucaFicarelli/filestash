@@ -6,15 +6,16 @@ package plg_handler_syncthing
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/gorilla/mux"
-	. "github.com/mickael-kerjean/filestash/server/common"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/gorilla/mux"
+	. "github.com/mickael-kerjean/filestash/server/common"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const SYNCTHING_URI = "/admin/syncthing"
@@ -64,7 +65,7 @@ func init() {
 		server_url()
 	})
 
-	Hooks.Register.HttpEndpoint(func(r *mux.Router, _ *App) error {
+	Hooks.Register.HttpEndpoint(func(r *mux.Router) error {
 		if plugin_enable() == false {
 			return nil
 		}

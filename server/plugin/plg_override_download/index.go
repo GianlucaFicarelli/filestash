@@ -1,14 +1,14 @@
 package plg_override_download
 
 import (
-	"embed"
+	_ "embed"
 
 	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
-//go:embed assets/*
-var STATIC embed.FS
+//go:embed assets/pages/filespage/thing.js
+var PATCH []byte
 
 func init() {
-	Hooks.Register.StaticPatch(STATIC)
+	Hooks.Register.StaticPatch(PATCH)
 }

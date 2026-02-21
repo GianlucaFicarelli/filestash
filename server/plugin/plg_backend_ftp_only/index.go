@@ -149,6 +149,10 @@ func (f Ftp) Ls(path string) ([]os.FileInfo, error) {
 	return f.client.ReadDir(path)
 }
 
+func (f Ftp) Stat(path string) (os.FileInfo, error) {
+	return f.client.Stat(path)
+}
+
 func (f Ftp) Cat(path string) (io.ReadCloser, error) {
 	pr, pw := io.Pipe()
 	go func() {

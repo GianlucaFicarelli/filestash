@@ -1,10 +1,11 @@
 package plg_image_golang
 
 import (
-	"github.com/h2non/bimg"
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"net/http"
+
+	"github.com/h2non/bimg"
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 const THUMB_SIZE int = 150

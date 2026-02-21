@@ -104,24 +104,24 @@ func init() {
 		image_caching()
 	})
 
-	Hooks.Register.ProcessFileContentBeforeSend(func(reader io.ReadCloser, ctx *App, res *http.ResponseWriter, req *http.Request) (io.ReadCloser, error) {
+	Hooks.Register.ProcessFileContentBeforeSend(func(reader io.ReadCloser, ctx *App, res *http.ResponseWriter, req *http.Request) (io.ReadCloser, bool, error) {
 		if plugin_enable() == false {
-			return reader, nil
+			return reader, false, nil
 		}
 
 		query := req.URL.Query()
 		mType := GetMimeType(query.Get("path"))
 
 		if strings.HasPrefix(mType, "image/") == false {
-			return reader, nil
+			return reader, false, nil
 		} else if mType == "image/svg+xml" {
-			return reader, nil
+			return reader, false, nil
 		} else if mType == "image/x-icon" {
-			return reader, nil
+			return reader, false, nil
 		} else if query.Get("thumbnail") != "true" && query.Get("size") == "" {
-			return reader, nil
+			return reader, false, nil
 		} else if query.Get("thumbnail") != "true" && mType == "image/gif" {
-			return reader, nil
+			return reader, false, nil
 		}
 
 		/////////////////////////
@@ -139,7 +139,7 @@ func init() {
 			(*res).Header().Set("Cache-Control", fmt.Sprintf("max-age=%d", image_caching()))
 			size, err := strconv.ParseInt(query.Get("size"), 10, 64)
 			if err != nil {
-				return reader, nil
+				return reader, false, nil
 			}
 			transform.Size = int(size)
 			transform.Crop = false
@@ -152,7 +152,7 @@ func init() {
 		// => impedance matching with something usable by CGO
 		file, err := os.OpenFile(transform.Input, os.O_WRONLY|os.O_CREATE, os.ModePerm)
 		if err != nil {
-			return reader, ErrFilesystemError
+			return reader, false, ErrFilesystemError
 		}
 		io.Copy(file, reader)
 		file.Close()
@@ -168,14 +168,14 @@ func init() {
 				mType = "image/jpeg"
 				(*res).Header().Set("Content-Type", mType)
 			} else {
-				return reader, nil
+				return reader, false, nil
 			}
 		}
 
 		/////////////////////////
 		// final stage: resizing
 		if mType != "image/jpeg" && mType != "image/png" && mType != "image/gif" && mType != "image/tiff" {
-			return reader, nil
+			return reader, false, nil
 		}
 
 		return CreateThumbnail(transform)
