@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	. "github.com/mickael-kerjean/filestash/server/common"
-	. "github.com/mickael-kerjean/filestash/server/pkg/workflow/trigger"
 	. "github.com/mickael-kerjean/filestash/server/pkg/workflow/model"
+	. "github.com/mickael-kerjean/filestash/server/pkg/workflow/trigger"
 )
 
 var (

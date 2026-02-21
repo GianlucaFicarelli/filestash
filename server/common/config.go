@@ -16,8 +16,8 @@ type Configuration struct {
 	mu    sync.RWMutex
 	cache sync.Map
 
-	Form  []Form
-	Conn  []map[string]any
+	Form []Form
+	Conn []map[string]any
 }
 
 type ConfigElement struct {
@@ -351,7 +351,7 @@ func (this *Configuration) Export() interface{} {
 		Version:          BUILD_REF,
 		EnableChromecast: this.Get("features.protection.enable_chromecast").Bool(),
 		EnableShare:      this.Get("features.share.enable").Bool(),
-		EnableTags: Hooks.Get.Metadata() != nil,
+		EnableTags:       Hooks.Get.Metadata() != nil,
 	}
 }
 
