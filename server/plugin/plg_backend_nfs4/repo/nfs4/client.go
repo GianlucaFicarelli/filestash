@@ -488,7 +488,7 @@ func (c *NfsClient) translateFileMeta(name string, attrs Fattr4) FileInfo {
 		curOff += 8
 
 		mtimeNsec := binary.BigEndian.Uint32(attrs.Attr_vals[curOff : curOff+4])
-		curOff += 4
+		curOff += 4 //nolint:ineffassign
 
 		// I hope this works for times before 1970-01-01...
 		res.Mtime = time.Unix(int64(mtimeSec), int64(mtimeNsec))

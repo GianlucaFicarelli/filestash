@@ -181,14 +181,6 @@ func decompress(something []byte) ([]byte, error) {
 	return io.ReadAll(r)
 }
 
-func sign(something []byte) ([]byte, error) {
-	return something, nil
-}
-
-func verify(something []byte) ([]byte, error) {
-	return something, nil
-}
-
 // Create a unique ID that can be use to identify different session
 func GenerateID(params map[string]string) string {
 	p := ""
@@ -252,15 +244,17 @@ func NewNonceGenerator(size int) NonceGenerator {
 
 func (this *NonceGenerator) Next() []byte {
 	this.Lock()
-	newNonce := make([]byte, this.count)
+	defer this.Unlock()
+
 	for i := len(this.current) - 1; i >= 0; i-- {
 		if this.current[i] < 255 {
-			this.current[i] += 1
+			this.current[i]++
 			break
 		}
 		this.current[i] = 0
 	}
-	newNonce = this.current
-	this.Unlock()
+
+	newNonce := make([]byte, this.count)
+	copy(newNonce, this.current)
 	return newNonce
 }

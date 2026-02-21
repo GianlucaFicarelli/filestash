@@ -262,7 +262,7 @@ func wopiDiscovery(ctx *App, fullpath string) (string, error) {
 	}
 	wopiSRC := origin()
 	if wopiSRC == "" {
-		wopiSRC := "http://"
+		wopiSRC = "http://"
 		if Config.Get("general.force_ssl").Bool() {
 			wopiSRC = "https://"
 		}

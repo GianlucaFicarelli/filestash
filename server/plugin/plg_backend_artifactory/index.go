@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"net/http"
 	"net/url"
@@ -12,6 +11,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 func init() {
@@ -226,10 +227,13 @@ func (this ArtifactoryStorage) Cat(path string) (io.ReadCloser, error) {
 		Uri string `json:"uri"`
 	}{}
 	if err := json.Unmarshal(jsonStr, &artifactoryResponse); err != nil {
-		Log.Warning("plg_backend_artifactory::ls unmarshall %s", err.Error())
+		Log.Warning("plg_backend_artifactory::cat unmarshall %s", err.Error())
 		return nil, ErrNotValid
 	}
 	req, err = http.NewRequest("GET", artifactoryResponse.DownloadLink, nil)
+	if err != nil {
+		return nil, err
+	}
 	req.Header.Add("Authorization", "Bearer "+this.token)
 	res, err = HTTPClient.Do(req)
 	return res.Body, err
