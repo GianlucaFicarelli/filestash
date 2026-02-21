@@ -35,12 +35,12 @@ func init() {
 						return
 					}
 					SendSuccessResultsWithMetadata(res, files, Metadata{
-						CanCreateFile: NewBool(false),
+						CanCreateFile:      NewBool(false),
 						CanCreateDirectory: NewBool(false),
-						CanRename:     NewBool(false),
-						CanMove:       NewBool(false),
-						CanUpload:     NewBool(false),
-						CanDelete: NewBool(false),
+						CanRename:          NewBool(false),
+						CanMove:            NewBool(false),
+						CanUpload:          NewBool(false),
+						CanDelete:          NewBool(false),
 					})
 					return
 				}
@@ -52,13 +52,13 @@ func init() {
 			if strings.HasSuffix(req.URL.Path, "/api/files/save") && (req.Method == http.MethodPost) {
 				recentPathAdd = req.URL.Query().Get("path")
 			}
-			if strings.HasSuffix(req.URL.Path, "/api/files/rm") && req.Method == http.MethodPost  {
+			if strings.HasSuffix(req.URL.Path, "/api/files/rm") && req.Method == http.MethodPost {
 				recentPathRemove = req.URL.Query().Get("path")
 			}
-			if strings.HasSuffix(req.URL.Path, "/api/files/mkdir") && req.Method == http.MethodPost  {
+			if strings.HasSuffix(req.URL.Path, "/api/files/mkdir") && req.Method == http.MethodPost {
 				recentPathAdd = EnforceDirectory(req.URL.Query().Get("path"))
 			}
-			if strings.HasSuffix(req.URL.Path, "/api/files/mv") && req.Method == http.MethodPost  {
+			if strings.HasSuffix(req.URL.Path, "/api/files/mv") && req.Method == http.MethodPost {
 				recentPathRemove = req.URL.Query().Get("from")
 				recentPathAdd = req.URL.Query().Get("to")
 			}

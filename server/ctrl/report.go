@@ -3,9 +3,9 @@ package ctrl
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 	"net/http"
 	"os"
+	"strings"
 
 	. "github.com/mickael-kerjean/filestash/server/common"
 )

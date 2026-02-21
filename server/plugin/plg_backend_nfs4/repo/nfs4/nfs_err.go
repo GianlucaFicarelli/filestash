@@ -19,6 +19,7 @@ func IsNfsError(err error, code NfsErrorCode) bool {
  * Error status. See https://www.rfc-editor.org/rfc/rfc7530
  */
 type NfsErrorCode int32
+
 const (
 	/* everything is okay      */
 	OK NfsErrorCode = 0

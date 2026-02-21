@@ -1,8 +1,8 @@
 package plg_widget_recent
 
 import (
-	"os"
 	"database/sql"
+	"os"
 
 	. "github.com/mickael-kerjean/filestash/server/common"
 )

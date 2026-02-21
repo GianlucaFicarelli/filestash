@@ -28,9 +28,9 @@ func (this *MentionTrigger) Manifest() WorkflowSpecs {
 		Specs: Form{
 			Elmnts: []FormElement{
 				{
-					Name: "path",
-					Type: "text",
-					Default: "/**",
+					Name:        "path",
+					Type:        "text",
+					Default:     "/**",
 					Placeholder: "Default: /**",
 				},
 			},

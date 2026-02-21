@@ -1,8 +1,8 @@
 package plg_widget_recent
 
 import (
-	"strings"
 	"os"
+	"strings"
 	"time"
 
 	. "github.com/mickael-kerjean/filestash/server/common"

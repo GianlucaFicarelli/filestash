@@ -27,4 +27,3 @@ func (c *cleanuper) Cleanup() {
 		c.cleanup()
 	}
 }
-

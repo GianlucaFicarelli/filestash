@@ -2,10 +2,10 @@ package plg_widget_recent
 
 import (
 	"context"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
-	"os"
 
 	. "github.com/mickael-kerjean/filestash/server/common"
 )

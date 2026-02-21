@@ -35,8 +35,8 @@ type Salt struct {
 //
 // The length is set thus:
 //
-//   length > SaltLenMax: length = SaltLenMax
-//   length < SaltLenMin: length = SaltLenMin
+//	length > SaltLenMax: length = SaltLenMax
+//	length < SaltLenMin: length = SaltLenMin
 func (s *Salt) Generate(length int) []byte {
 	if length > s.SaltLenMax {
 		length = s.SaltLenMax
@@ -62,12 +62,12 @@ func (s *Salt) Generate(length int) []byte {
 //
 // The parameters are set thus:
 //
-//   length > SaltLenMax: length = SaltLenMax
-//   length < SaltLenMin: length = SaltLenMin
+//	length > SaltLenMax: length = SaltLenMax
+//	length < SaltLenMin: length = SaltLenMin
 //
-//   rounds < 0: rounds = RoundsDefault
-//   rounds < RoundsMin: rounds = RoundsMin
-//   rounds > RoundsMax: rounds = RoundsMax
+//	rounds < 0: rounds = RoundsDefault
+//	rounds < RoundsMin: rounds = RoundsMin
+//	rounds > RoundsMax: rounds = RoundsMax
 //
 // If rounds is equal to RoundsDefault, then the "rounds=" part of the salt is
 // removed.
