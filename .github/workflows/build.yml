@@ -1,4 +1,4 @@
-name: CI/CD
+name: build
 
 on:
   push:
@@ -6,17 +6,16 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
-          go-version: "1.26"
+          go-version-file: 'go.mod'
       - name: Build the application binary
         run: make build
