@@ -1,3 +1,18 @@
+# Filestash-gf
+
+This repository is a personal fork of Filestash:
+https://github.com/mickael-kerjean/filestash
+
+It may contain modifications and experimental plugins.
+
+---
+
+## README
+
+The content below is copied from the upstream project and remains under its original license.
+
+---
+
 ![screenshot](https://raw.githubusercontent.com/mickael-kerjean/filestash_images/master/.assets/photo.jpg)
 
 # What is this?
@@ -84,12 +99,10 @@ To see what's currently installed in your instance, head over to [/about](https:
 
 # Support
 
-- Commercial Users → [support contract](https://www.filestash.app/pricing/?origin=github)
-- For individuals → [#filestash](https://kiwiirc.com/nextclient/#irc://irc.libera.chat/#filestash?nick=guest??) on IRC (libera.chat).
+For support of the original project, please see the upstream repository:
+https://github.com/mickael-kerjean/filestash
 
-Want to help us sprinkle some toppings on our noodle cups?
-- Bitcoin: `3LX5KGmSmHDj5EuXrmUvcg77EJxCxmdsgW`
-- [Open Collective](https://opencollective.com/filestash)
+This fork is maintained for personal use and does not provide commercial support.
 
 
 # Credits
