@@ -14,3 +14,12 @@ clean:
 
 serve:
 	go run server.go
+
+install:
+	npm install
+
+lint: install
+	npm run lint
+
+check: install
+	npm run check
