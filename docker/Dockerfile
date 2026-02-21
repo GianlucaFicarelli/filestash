@@ -1,38 +1,80 @@
-# STEP1: CLONE THE CODE
-FROM alpine/git as builder_prepare
-WORKDIR /home/
-ARG GIT_REPO=https://github.com/mickael-kerjean/filestash
-ARG GIT_BRANCH=master
-RUN git clone --depth 1 --single-branch --branch ${GIT_BRANCH} ${GIT_REPO}
+FROM golang:1.26-trixie AS builder
 
-# STEP2: BUILD BACKEND
-FROM golang:1.24-trixie AS builder_backend
-WORKDIR /home/filestash/
-COPY --from=builder_prepare /home/filestash/ .
-RUN apt-get update > /dev/null && \
-    apt-get install -y curl make > /dev/null 2>&1 && \
-    apt-get install -y libjpeg-dev libtiff-dev libpng-dev libwebp-dev libraw-dev libheif-dev libgif-dev libvips-dev > /dev/null 2>&1 && \
-    make init && \
-    make build && \
-    mkdir -p ./dist/data/state/config/ && \
-    cp config/config.json ./dist/data/state/config/config.json
+WORKDIR /src
 
-# STEP3: BUILD PROD IMAGE
-FROM debian:stable-slim
-MAINTAINER mickael@kerjean.me
-WORKDIR /app/
-COPY --from=builder_backend /home/filestash/dist/ .
-RUN apt-get update > /dev/null && \
-    apt-get install -y --no-install-recommends apt-utils && \
-    apt-get install -y curl ffmpeg libjpeg-dev libtiff-dev libpng-dev libwebp-dev libraw-dev libheif-dev libgif-dev && \
-    useradd filestash && \
-    chown -R filestash:filestash /app/ && \
-    find /app/data/ -type d -exec chmod 770 {} \; && \
-    find /app/data/ -type f -exec chmod 760 {} \; && \
-    chmod 730 /app/filestash && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/*
+# Install build dependencies (dev headers only here)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        pkg-config \
+        libjpeg-dev \
+        libtiff-dev \
+        libpng-dev \
+        libwebp-dev \
+        libraw-dev \
+        libheif-dev \
+        libgif-dev \
+        libvips-dev \
+        ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Enable CGO explicitly
+ENV CGO_ENABLED=1
+
+# Cache Go modules
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy directories
+COPY cmd/ ./cmd/
+COPY config/ ./config/
+COPY public/ ./public/
+COPY server/ ./server/
+
+# Copy individual files
+COPY embed.go ./
+COPY go.mod ./
+COPY go.sum ./
+
+# Inject version metadata
+ARG VERSION=dev
+ARG COMMIT=none
+ARG DATE=unknown
+
+RUN go build \
+    -trimpath \
+    -ldflags "-s -w \
+        -X main.version=${VERSION} \
+        -X main.commit=${COMMIT} \
+        -X main.date=${DATE}" \
+    --tags "fts5" \
+    -o dist/filestash \
+    ./cmd/main.go
+
+FROM debian:trixie-slim
+
+# Install runtime libraries only (NO -dev)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libjpeg62-turbo \
+        libtiff6 \
+        libpng16-16 \
+        libwebp7 \
+        libraw23 \
+        libheif1 \
+        libgif7 \
+        libvips \
+        ffmpeg \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m -u 10001 filestash
 
 USER filestash
-CMD ["/app/filestash"]
+WORKDIR /app
+
+COPY --chown=filestash:filestash --from=builder /src/dist ./
+COPY --chown=filestash:filestash ./config/config.json ./data/state/config/config.json
+
 EXPOSE 8334
+
+CMD ["/app/filestash"]
