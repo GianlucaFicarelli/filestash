@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"go/format"
 	"io"
@@ -10,11 +11,28 @@ import (
 )
 
 func main() {
-	f, err := os.OpenFile("../../config/mime.json", os.O_RDONLY, os.ModePerm)
+	output := flag.String("out", "", "path to output Go file (required)")
+	flag.Parse()
+
+	if *output == "" {
+		fmt.Fprintln(os.Stderr, "error: -out flag is required")
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	input := flag.String("in", "", "path to input mime file (required)")
+	flag.Parse()
+
+	if *input == "" {
+		fmt.Fprintln(os.Stderr, "error: -in flag is required")
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	f, err := os.OpenFile(*input, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
-		return
 	}
 	defer f.Close()
 
@@ -38,7 +56,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error formatting: %v\n", err)
 		os.Exit(1)
 	}
-	if err = os.WriteFile("../common/mime_generated.go", formatted, 0644); err != nil {
+	if err = os.WriteFile(*output, formatted, 0644); err != nil {
 		fmt.Fprintf(os.Stderr, "error writing file: %v\n", err)
 		os.Exit(1)
 	}

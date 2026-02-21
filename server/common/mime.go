@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//go:generate go run ../generator/mime.go
+//go:generate -command ../tools/generator-mime/main.go -out=mime_generated.go -in=../../config/mime.json
 var MimeTypes map[string]string = make(map[string]string, 0)
 
 func GetMimeType(p string) string {
