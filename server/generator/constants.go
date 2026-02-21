@@ -1,7 +1,8 @@
+//go:build ignore
+
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -10,14 +11,7 @@ import (
 )
 
 func main() {
-	output := flag.String("out", "", "path to output Go file (required)")
-	flag.Parse()
-
-	if *output == "" {
-		fmt.Fprintln(os.Stderr, "error: -out flag is required")
-		flag.Usage()
-		os.Exit(1)
-	}
+	output := "constants_generated.go" // path to output Go file
 
 	cmd := exec.Command("git", "rev-parse", "HEAD")
 	out, err := cmd.CombinedOutput()
@@ -28,7 +22,7 @@ func main() {
 
 	hash := strings.TrimSpace(string(out))
 
-	f, err := os.OpenFile(*output, os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	f, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
