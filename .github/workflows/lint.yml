@@ -18,6 +18,20 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version-file: 'go.mod'
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pkg-config \
+            libjpeg-dev \
+            libtiff-dev \
+            libpng-dev \
+            libwebp-dev \
+            libraw-dev \
+            libheif-dev \
+            libgif-dev \
+            libvips-dev \
+            libbrotli-dev
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
