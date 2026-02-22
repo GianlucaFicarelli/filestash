@@ -1,19 +1,20 @@
 package plg_image_transcode
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
-	"github.com/srwiley/oksvg"
-	"github.com/srwiley/rasterx"
 	"image"
 	"image/png"
 	"io"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
+	"github.com/srwiley/oksvg"
+	"github.com/srwiley/rasterx"
 )
 
 /*
  * This bit isn't used because the rendering is very poor and would
  * generate too many bug reports
  */
-func transcodeSvg(reader io.Reader) (io.ReadCloser, string, error) {
+func transcodeSvg(reader io.Reader) (io.ReadCloser, string, error) { //nolint:unused
 	icon, err := oksvg.ReadIconStream(reader)
 	if err != nil {
 		return nil, "", err

@@ -1,0 +1,41 @@
+name: lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: 'go.mod'
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pkg-config \
+            libjpeg-dev \
+            libtiff-dev \
+            libpng-dev \
+            libwebp-dev \
+            libraw-dev \
+            libheif-dev \
+            libgif-dev \
+            libvips-dev \
+            libbrotli-dev
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: latest
+          install-only: true
+      - name: Run linter
+        run: make lint

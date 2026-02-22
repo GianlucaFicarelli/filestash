@@ -33,7 +33,6 @@ func init() {
 type WebdavFs struct {
 	req        *http.Request
 	backend    IBackend
-	path       string
 	id         string
 	chroot     string
 	webdavFile *WebdavFile

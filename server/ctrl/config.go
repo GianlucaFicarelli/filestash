@@ -1,12 +1,11 @@
 package ctrl
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"net/http"
-)
 
-var configpath = GetAbsolutePath(CONFIG_PATH, "config.json")
+	. "github.com/mickael-kerjean/filestash/server/common"
+)
 
 func PrivateConfigHandler(ctx *App, res http.ResponseWriter, req *http.Request) {
 	SendSuccessResult(res, &Config)

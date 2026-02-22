@@ -22,7 +22,7 @@ init: # Initialize go modules (tidy & download dependencies)
 	go mod tidy
 	go mod download
 
-generate: # Generate code with go generate
+generate: init # Generate code with go generate
 	go generate -x ./server/...
 
 build: generate # Build the application binary

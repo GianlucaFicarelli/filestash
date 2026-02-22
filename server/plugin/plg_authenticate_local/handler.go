@@ -17,7 +17,7 @@ func UserManagementHandler(ctx *App, res http.ResponseWriter, req *http.Request)
 		if email == "" {
 			email = req.URL.Query().Get("email")
 		}
-		if err := removeUser(req.FormValue("email")); err != nil {
+		if err := removeUser(email); err != nil {
 			SendErrorResult(res, err)
 			return
 		}

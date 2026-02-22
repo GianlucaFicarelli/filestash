@@ -1,0 +1,8 @@
+version: "2"
+
+linters:
+  default: standard
+  disable:
+    - errcheck # temporarily disabled
+    - govet # temporarily disabled
+    - staticcheck # temporarily disabled
