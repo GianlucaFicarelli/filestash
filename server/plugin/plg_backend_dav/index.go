@@ -3,7 +3,6 @@ package plg_backend_dav
 import (
 	"encoding/xml"
 	"fmt"
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"net/http"
 	"net/url"
@@ -12,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 var DavCache AppCache

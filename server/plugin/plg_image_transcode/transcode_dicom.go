@@ -3,11 +3,12 @@ package plg_image_transcode
 import (
 	"bufio"
 	"bytes"
+	"image/jpeg"
+	"io"
+
 	. "github.com/mickael-kerjean/filestash/server/common"
 	"github.com/suyashkumar/dicom"
 	"github.com/suyashkumar/dicom/pkg/tag"
-	"image/jpeg"
-	"io"
 )
 
 func transcodeDicom(reader io.Reader) (io.ReadCloser, string, error) {
