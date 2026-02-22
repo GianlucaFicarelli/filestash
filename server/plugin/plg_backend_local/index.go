@@ -1,12 +1,11 @@
 package plg_backend_local
 
 import (
+	. "github.com/mickael-kerjean/filestash/server/common"
+	"golang.org/x/crypto/bcrypt"
 	"io"
 	"os"
 	"os/user"
-
-	. "github.com/mickael-kerjean/filestash/server/common"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func init() {

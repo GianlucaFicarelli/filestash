@@ -5,11 +5,10 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"storj.io/uplink"
 	"strings"
 	"sync"
 	"time"
-
-	"storj.io/uplink"
 
 	. "github.com/mickael-kerjean/filestash/server/common"
 

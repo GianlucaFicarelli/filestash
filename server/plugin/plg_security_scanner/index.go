@@ -3,13 +3,12 @@ package plg_security_scanner
 import (
 	"bytes"
 	"encoding/base64"
+	"github.com/gorilla/mux"
+	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"math/rand"
 	"net/http"
 	"strings"
-
-	"github.com/gorilla/mux"
-	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 var (

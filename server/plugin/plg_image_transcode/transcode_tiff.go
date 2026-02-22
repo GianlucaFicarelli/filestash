@@ -1,12 +1,11 @@
 package plg_image_transcode
 
 import (
+	. "github.com/mickael-kerjean/filestash/server/common"
+	_ "golang.org/x/image/tiff"
 	"image"
 	"image/jpeg"
 	"io"
-
-	. "github.com/mickael-kerjean/filestash/server/common"
-	_ "golang.org/x/image/tiff"
 )
 
 func transcodeTiff(reader io.Reader) (io.ReadCloser, string, error) {

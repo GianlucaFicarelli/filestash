@@ -2,9 +2,8 @@ package plg_search_stateless
 
 import (
 	"fmt"
-	"time"
-
 	. "github.com/mickael-kerjean/filestash/server/common"
+	"time"
 )
 
 var (

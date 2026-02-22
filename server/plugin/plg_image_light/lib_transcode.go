@@ -6,11 +6,10 @@ import "C"
 
 import (
 	"context"
-	"time"
-	"unsafe"
-
 	. "github.com/mickael-kerjean/filestash/server/common"
 	"golang.org/x/sync/semaphore"
+	"time"
+	"unsafe"
 )
 
 const (

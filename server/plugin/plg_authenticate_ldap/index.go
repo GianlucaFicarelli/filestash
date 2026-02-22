@@ -1,9 +1,8 @@
 package plg_authenticate_ldap
 
 import (
-	"net/http"
-
 	. "github.com/mickael-kerjean/filestash/server/common"
+	"net/http"
 )
 
 func init() {

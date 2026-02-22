@@ -3,12 +3,11 @@ package formater
 import (
 	"bytes"
 	"fmt"
+	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"math/rand"
 	"os"
 	"os/exec"
-
-	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 func PdfFormater(r io.ReadCloser) (io.ReadCloser, error) {

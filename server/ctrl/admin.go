@@ -2,14 +2,13 @@ package ctrl
 
 import (
 	"encoding/json"
+	. "github.com/mickael-kerjean/filestash/server/common"
+	"golang.org/x/crypto/bcrypt"
 	"io"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
-
-	. "github.com/mickael-kerjean/filestash/server/common"
-	"golang.org/x/crypto/bcrypt"
 )
 
 var logpath = GetAbsolutePath(LOG_PATH, "access.log")

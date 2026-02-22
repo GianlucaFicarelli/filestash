@@ -3,12 +3,11 @@ package ctrl
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"strings"
-
 	"github.com/gorilla/mux"
 	. "github.com/mickael-kerjean/filestash/server/common"
 	"github.com/mickael-kerjean/filestash/server/model"
+	"net/http"
+	"strings"
 )
 
 func ShareList(ctx *App, res http.ResponseWriter, req *http.Request) {

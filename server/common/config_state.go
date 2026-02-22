@@ -15,11 +15,10 @@ package common
 
 import (
 	"fmt"
-	"io"
-	"os"
-
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
+	"io"
+	"os"
 )
 
 var (

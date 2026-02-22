@@ -1,12 +1,11 @@
 package plg_backend_nop
 
 import (
+	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"os"
 	"strconv"
 	"strings"
-
-	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 func init() {

@@ -1,11 +1,10 @@
 package plg_security_svg
 
 import (
+	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"net/http"
 	"regexp"
-
-	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 var (

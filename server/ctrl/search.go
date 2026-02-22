@@ -1,11 +1,10 @@
 package ctrl
 
 import (
-	"net/http"
-	"strings"
-
 	. "github.com/mickael-kerjean/filestash/server/common"
 	"github.com/mickael-kerjean/filestash/server/model"
+	"net/http"
+	"strings"
 )
 
 func FileSearch(ctx *App, res http.ResponseWriter, req *http.Request) {
