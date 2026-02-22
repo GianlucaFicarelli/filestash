@@ -1,3 +1,5 @@
+//go:build ignore
+
 package main
 
 import (
@@ -10,11 +12,13 @@ import (
 )
 
 func main() {
-	f, err := os.OpenFile("../../config/mime.json", os.O_RDONLY, os.ModePerm)
+	output := "mime_generated.go"     // path to output Go file
+	input := "../../config/mime.json" // path to input mime file
+
+	f, err := os.OpenFile(input, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
-		return
 	}
 	defer f.Close()
 
@@ -38,7 +42,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error formatting: %v\n", err)
 		os.Exit(1)
 	}
-	if err = os.WriteFile("../common/mime_generated.go", formatted, 0644); err != nil {
+	if err = os.WriteFile(output, formatted, 0644); err != nil {
 		fmt.Fprintf(os.Stderr, "error writing file: %v\n", err)
 		os.Exit(1)
 	}

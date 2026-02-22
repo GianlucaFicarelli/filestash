@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+#include <errno.h>
+
+#include "compat_reallocarray.h"
+
 #include <gif_lib.h>
 #include <webp/encode.h>
 #include <unistd.h>

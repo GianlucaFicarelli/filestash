@@ -647,13 +647,6 @@ func (this Dav) parseURL(link string) (string, error) {
 	return destination.String(), nil
 }
 
-func joinURL(base string, bit string) string {
-	if strings.HasSuffix(base, "/") == false {
-		base += "/"
-	}
-	return base + bit
-}
-
 type DavResource struct {
 	Url   string `xml:"href"`
 	Name  string `xml:"-"`

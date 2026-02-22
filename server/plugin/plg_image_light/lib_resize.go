@@ -8,11 +8,12 @@ import "C"
 
 import (
 	"context"
-	. "github.com/mickael-kerjean/filestash/server/common"
-	"golang.org/x/sync/semaphore"
 	"io"
 	"time"
 	"unsafe"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
+	"golang.org/x/sync/semaphore"
 )
 
 const (
@@ -22,11 +23,11 @@ const (
 
 var VIPS_LOCK = semaphore.NewWeighted(THUMBNAIL_MAX_CONCURRENT)
 
-func CreateThumbnail(t *Transform) (io.ReadCloser, error) {
+func CreateThumbnail(t *Transform) (io.ReadCloser, bool, error) {
 	ctx, cancel := context.WithDeadline(context.Background(), time.Now().Add(THUMBNAIL_TIMEOUT))
 	defer cancel()
 	if err := VIPS_LOCK.Acquire(ctx, 1); err != nil {
-		return nil, ErrCongestion
+		return nil, false, ErrCongestion
 	}
 	defer VIPS_LOCK.Release(1)
 
@@ -49,11 +50,11 @@ func CreateThumbnail(t *Transform) (io.ReadCloser, error) {
 	select {
 	case img := <-imageChannel:
 		if img == nil {
-			return nil, ErrNotValid
+			return nil, false, ErrNotValid
 		}
-		return img, nil
+		return img, true, nil
 	case <-ctx.Done():
-		return nil, ErrTimeout
+		return nil, false, ErrTimeout
 	}
 }
 

@@ -1,9 +1,10 @@
 package plg_image_transcode
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"net/http"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 func init() {
@@ -19,8 +20,8 @@ func renderImages(reader io.ReadCloser, ctx *App, res *http.ResponseWriter, req 
 	}
 
 	var (
-		out io.ReadCloser = nil
-		err error         = nil
+		out io.ReadCloser
+		err error
 	)
 	mType := GetMimeType(query.Get("path"))
 	switch mType {

@@ -6,5 +6,4 @@ import "C"
 
 func webp(input uintptr, output uintptr, size int) {
 	C.webp_to_webp(C.int(input), C.int(output), C.int(size))
-	return
 }
