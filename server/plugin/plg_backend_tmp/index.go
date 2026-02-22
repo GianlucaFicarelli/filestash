@@ -2,12 +2,13 @@ package plg_backend_tmp
 
 import (
 	"encoding/base64"
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 const (

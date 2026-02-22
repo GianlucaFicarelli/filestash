@@ -2,10 +2,11 @@ package common
 
 import (
 	"fmt"
-	"github.com/mitchellh/hashstructure"
-	"github.com/patrickmn/go-cache"
 	"sync"
 	"time"
+
+	"github.com/mitchellh/hashstructure"
+	"github.com/patrickmn/go-cache"
 )
 
 type AppCache struct {
