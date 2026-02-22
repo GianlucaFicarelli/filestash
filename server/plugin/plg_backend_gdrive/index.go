@@ -1,11 +1,6 @@
 package plg_backend_gdrive
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
-	"golang.org/x/net/context"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
-	"google.golang.org/api/drive/v3"
 	"io"
 	"os"
 	"path/filepath"
@@ -13,6 +8,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
+	"golang.org/x/net/context"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+	"google.golang.org/api/drive/v3"
 )
 
 const gdriveFolderMarker = "application/vnd.google-apps.folder"

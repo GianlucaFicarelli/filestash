@@ -2,8 +2,9 @@ package model
 
 import (
 	"fmt"
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"strings"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 func NewBackend(ctx *App, conn map[string]string) (IBackend, error) {

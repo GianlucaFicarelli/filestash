@@ -12,9 +12,10 @@ import (
 	. "github.com/mickael-kerjean/filestash/server/common"
 	"github.com/mickael-kerjean/filestash/server/pkg/sqlite"
 
+	"html/template"
+
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/gomail.v2"
-	"html/template"
 )
 
 type Proof struct {

@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"os"
 	"regexp"
@@ -13,6 +11,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 type Mysql struct {

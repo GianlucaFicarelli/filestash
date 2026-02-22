@@ -3,11 +3,12 @@ package plg_starter_https
 import (
 	"crypto/tls"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/gorilla/mux"
 	. "github.com/mickael-kerjean/filestash/server/common"
 	"github.com/mickael-kerjean/filestash/server/common/ssl"
-	"net/http"
-	"time"
 )
 
 func init() {

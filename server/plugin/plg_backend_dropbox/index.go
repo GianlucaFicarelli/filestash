@@ -2,7 +2,6 @@ package plg_backend_dropbox
 
 import (
 	"encoding/json"
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"io"
 	"net/http"
 	"os"
@@ -10,6 +9,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 func init() {

@@ -1,8 +1,9 @@
 package plg_authenticate_saml
 
 import (
-	. "github.com/mickael-kerjean/filestash/server/common"
 	"net/http"
+
+	. "github.com/mickael-kerjean/filestash/server/common"
 )
 
 func init() {
