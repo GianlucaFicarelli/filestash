@@ -38,6 +38,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Enforce lower case
+        run: |
+          echo IMAGE_NAME=$(echo ${{ env.IMAGE_NAME }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -48,8 +52,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}-${{ matrix.platform }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          provenance: true # supply chain attestation
-          sbom: true # generate SBOM
+          provenance: false
 
   manifest:
     needs: build
@@ -61,6 +64,10 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enforce lower case
+        run: |
+          echo IMAGE_NAME=$(echo ${{ env.IMAGE_NAME }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       - name: Create multi-arch manifest
         run: |
