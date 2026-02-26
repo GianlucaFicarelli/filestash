@@ -38,7 +38,8 @@ ARG VERSION=dev
 ARG COMMIT=none
 ARG DATE=unknown
 
-RUN make build
+RUN --mount=type=bind,source=.git,target=.git \
+    make build
 
 FROM debian:trixie-slim
 
