@@ -22,11 +22,15 @@ func main() {
 
 	hash := strings.TrimSpace(string(out))
 
+	if len(hash) < 7 {
+		fmt.Fprintf(os.Stderr, "unexpected short hash: %q\n", hash)
+		os.Exit(1)
+	}
+
 	f, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
-		return
 	}
 	f.Write([]byte(fmt.Sprintf(`
 package common
