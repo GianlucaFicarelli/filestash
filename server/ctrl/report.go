@@ -124,6 +124,6 @@ func HealthHandler(ctx *App, res http.ResponseWriter, req *http.Request) {
 	// SUCCESS!!
 	res.WriteHeader(http.StatusOK)
 	if req.Method != "HEAD" {
-		res.Write([]byte(`{"status": "ok"}`))
+		res.Write([]byte(`{"status": "pass"}`))
 	}
 }
