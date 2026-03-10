@@ -67,7 +67,7 @@ int psd_to_webp(int inputDesc, int outputDesc, int targetSize) {
     goto CLEANUP_AND_ABORT;
   }
   fwrite(webp_output_data, webp_output_size, 1, output);
-  fprintf(stderr, "WRITEN[%d]", webp_output_size);
+  fprintf(stderr, "WRITTEN[%zu]", webp_output_size);
   fflush(output);
 
   WebPFree(webp_output_data);
