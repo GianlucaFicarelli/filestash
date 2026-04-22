@@ -53,7 +53,7 @@ func init() {
 				return
 			}
 			srv.TLSConfig.Certificates = []tls.Certificate{TLSCert}
-			HTTPClient.Transport.(*TransformedTransport).Orig.(*http.Transport).TLSClientConfig = &tls.Config{
+			HTTPClient().Transport.(*TransformedTransport).Orig.(*http.Transport).TLSClientConfig = &tls.Config{
 				RootCAs: roots,
 			}
 			HTTP.Transport.(*TransformedTransport).Orig.(*http.Transport).TLSClientConfig = &tls.Config{
@@ -90,7 +90,7 @@ func ensureAppHasBooted(address string, message string) {
 			break
 		}
 		time.Sleep(250 * time.Millisecond)
-		res, err := HTTPClient.Get(address)
+		res, err := HTTPClient().Get(address)
 		if err != nil {
 			continue
 		}

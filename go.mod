@@ -27,7 +27,6 @@ require (
 	github.com/hirochachacha/go-smb2 v1.1.0
 	github.com/lib/pq v1.11.2
 	github.com/mattn/go-sqlite3 v1.14.34
-	github.com/mickael-kerjean/goftp v0.0.0-20260409003738-bbc066a52c39
 	github.com/mickael-kerjean/net v0.0.0-20191120063050-2457c043ba06
 	github.com/mitchellh/hashstructure v1.1.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
@@ -110,10 +109,8 @@ require (
 	github.com/rasky/go-xdr v0.0.0-20170124162913-1a41d1a06c93 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/secsy/goftp v0.0.0-20200609142545-aa2de14babf4 // indirect
-	github.com/secsy/goftp v0.0.0-20200609142545-aa2de14babf4 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/spacemonkeygo/monkit/v3 v3.0.25-0.20251022131615-eb24eb109368 // indirect
-	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect

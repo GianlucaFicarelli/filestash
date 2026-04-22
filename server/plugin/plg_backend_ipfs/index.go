@@ -109,7 +109,7 @@ func (this Ipfs) Cat(path string) (io.ReadCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-	resp, err := HTTPClient.Do(req)
+	resp, err := HTTPClient().Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +159,7 @@ func (this Ipfs) Save(path string, content io.Reader) error {
 		return err
 	}
 	req.Header.Set("Content-Type", writer.FormDataContentType())
-	resp, err := HTTPClient.Do(req)
+	resp, err := HTTPClient().Do(req)
 	if err != nil {
 		return err
 	}
@@ -183,7 +183,7 @@ func (this Ipfs) query(cmd string, response any) error {
 		return err
 	}
 	req.Header.Set("Accept", "application/json")
-	resp, err := HTTPClient.Do(req)
+	resp, err := HTTPClient().Do(req)
 	if err != nil {
 		return err
 	}

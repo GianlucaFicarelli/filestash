@@ -12,7 +12,6 @@ import (
 	"github.com/mickael-kerjean/filestash/server/ctrl"
 	"github.com/mickael-kerjean/filestash/server/model"
 
-	. "github.com/mickael-kerjean/filestash/server/common"
 	_ "github.com/mickael-kerjean/filestash/server/pkg"
 	"github.com/mickael-kerjean/filestash/server/pkg/workflow"
 	_ "github.com/mickael-kerjean/filestash/server/plugin"

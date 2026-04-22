@@ -593,7 +593,7 @@ func OnlyOfficeEventHandler(res http.ResponseWriter, req *http.Request) {
 			res.Write([]byte(`{"error": 1, "message": "couldn't create request for the oods server"}`))
 			return
 		}
-		f, err := HTTPClient.Do(r)
+		f, err := HTTPClient().Do(r)
 		if err != nil {
 			res.WriteHeader(http.StatusInternalServerError)
 			res.Write([]byte(`{"error": 1, "message": "couldn't fetch the document on the oods server"}`))
