@@ -7,20 +7,20 @@ import { load as loadPlugin } from "../../model/plugin.js";
 import { createLoader } from "../../components/loader.js";
 import { createModal, MODAL_RIGHT_BUTTON } from "../../components/modal.js";
 import { loadCSS, loadJS } from "../../helpers/loader.js";
-import ajax from "../../lib/ajax.js";
 import { extname } from "../../lib/path.js";
 import t from "../../locales/index.js";
 
 import ctrlError from "../ctrl_error.js";
 import ctrlDownloader, { init as initDownloader } from "./application_downloader.js";
 import { $ICON } from "./common_fab.js";
-import { cat, save } from "./model_files.js";
+import { cat, stat, save } from "./model_files.js";
 
 import { renderMenubar, buttonDownload } from "./component_menubar.js";
 import "../../components/fab.js";
 import "../../components/icon.js";
 
 const TIME_BEFORE_ABORT_EDIT = 5000;
+const MAX_EDIT_SIZE = 100*1024*1024;
 
 class IEditor {}
 
@@ -46,15 +46,12 @@ export default async function(render, { acl$, getFilename, getDownloadUrl, mime 
     const removeLoader = createLoader($page);
     const setup$ = rxjs.zip(
         rxjs.race(
-            // when a download takes too long, abort, we don't want to spin for 2 hours
-            // only to find out the user tried to open something that don't even fit in
-            // memory. This also account for terrible network conditions when out in
-            // the bush; we abort after:
-            // TIME_BEFORE_ABORT_EDIT + NETWORK LATENCY seconds
             cat(getDownloadUrl()),
-            rxjs.of(null).pipe(
-                rxjs.delay(TIME_BEFORE_ABORT_EDIT),
-                rxjs.mergeMap(() => ajax("about")),
+            stat(getDownloadUrl()).pipe(
+                rxjs.mergeMap(({ size }) => {
+                    if (size > MAX_EDIT_SIZE) return rxjs.of(null); // abort on file too large
+                    return rxjs.timer(TIME_BEFORE_ABORT_EDIT); // abort if it takes too long
+                }),
                 rxjs.mapTo(null),
             ),
         ),

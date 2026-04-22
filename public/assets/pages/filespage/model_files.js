@@ -79,6 +79,8 @@ export const mv = (from, to) => ajax({
 
 export const save = () => rxjs.of(null).pipe(rxjs.delay(1000));
 
+const bc = new BroadcastChannel("filestash::ls::refresh");
+
 export const ls = (path) => {
     const lsFromCache = (path) => rxjs.from(fscache().get(path));
     const lsFromHttp = (path) => ajax({
@@ -101,9 +103,12 @@ export const ls = (path) => {
         lsFromCache(path),
         rxjs.merge(
             rxjs.of(null),
-            rxjs.merge(rxjs.of(null), rxjs.fromEvent(window, "keydown").pipe( // "r" shorcut
-                rxjs.filter((e) => e.keyCode === 82 && !isAlreadyFocused()),
-            )).pipe(
+            rxjs.merge(
+                rxjs.of(null), rxjs.fromEvent(window, "keydown").pipe( // "r" shorcut
+                    rxjs.filter((e) => e.keyCode === 82 && !isAlreadyFocused()),
+                ),
+                rxjs.fromEvent(bc, "message"),
+            ).pipe(
                 rxjs.switchMap(() => lsFromHttp(path)),
                 rxjs.catchError((err) => navigator.onLine ? rxjs.throwError(err) : rxjs.EMPTY),
             ),
@@ -147,12 +152,24 @@ export const ls = (path) => {
     );
 };
 
+export const refresh = () => {
+    window.dispatchEvent(new KeyboardEvent("keydown", { keyCode: 82 }));
+    bc.postMessage(null);
+};
+
 export const search = (term) => ajax({
     url: withURLParams(`api/files/search?path=${encodeURIComponent(currentPath())}&q=${encodeURIComponent(term)}`),
     responseType: "json"
 }).pipe(rxjs.map(({ responseJSON }) => ({
     files: responseJSON.results,
 })));
+
+export const searchUrlParam = (term = null) => {
+    const url = new URL(location.href);
+    if (term) url.searchParams.set("q", term);
+    else url.searchParams.delete("q");
+    history.replaceState(history.state, "", url.toString());
+};
 
 class Hook {
     constructor() {

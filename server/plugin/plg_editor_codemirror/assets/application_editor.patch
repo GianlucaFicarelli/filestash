@@ -1,0 +1,78 @@
+diff --git a/public/assets/pages/viewerpage/application_editor.js b/public/assets/pages/viewerpage/application_editor.js
+index ec6dfcd4..cb38993f 100644
+--- a/public/assets/pages/viewerpage/application_editor.js
++++ b/public/assets/pages/viewerpage/application_editor.js
+@@ -9,3 +9,3 @@ import { createModal, MODAL_RIGHT_BUTTON } from "../../components/modal.js";
+ import { loadCSS, loadJS } from "../../helpers/loader.js";
+-import { extname } from "../../lib/path.js";
++import { extname, forwardURLParams } from "../../lib/path.js";
+ import t from "../../locales/index.js";
+@@ -15,3 +15,5 @@ import ctrlDownloader, { init as initDownloader } from "./application_downloader
+ import { $ICON } from "./common_fab.js";
++import ajax from "../../lib/ajax.js";
+ import { cat, stat, save } from "./model_files.js";
++import { getCurrentPath } from "./common.js";
+
+@@ -161,6 +163,13 @@ export default async function(render, { acl$, getFilename, getDownloadUrl, mime
+             const content = cm.getValue();
+-            return save(content).pipe(rxjs.tap(() => {
+-                $fab.removeAttribute("disabled");
+-                content$.next(content);
+-            }));
++            return save(content).pipe(
++                rxjs.mergeMap(() => ajax({
++                    url: forwardURLParams("api/codemirror/reset?path=" + encodeURIComponent(getCurrentPath()), ["share"]),
++                    method: "POST",
++                    headers: { "Content-Type": "application/json" },
++                })),
++                rxjs.tap(() => {
++                    $fab.removeAttribute("disabled");
++                    content$.next(content);
++                }),
++            );
+         }),
+@@ -169,2 +178,44 @@ export default async function(render, { acl$, getFilename, getDownloadUrl, mime
+
++    // feature: collaborative editing
++    effect(setup$.pipe(
++        rxjs.mergeMap((editor) => {
++            const path = encodeURIComponent(getCurrentPath());
++            const clientID = Math.random().toString(36).slice(2);
++
++            const pull$ = new rxjs.Observable((observer) => {
++                const es = new EventSource(forwardURLParams("api/codemirror/pull?path=" + path, ["share"]));
++                es.onmessage = (ev) => {
++                    for (const change of JSON.parse(ev.data)) {
++                        if (change.clientID === clientID) continue;
++                        editor.replaceRange(change.text, change.from, change.to, "remote");
++                    }
++                };
++                es.onerror = () => observer.error();
++                return () => es.close();
++            }).pipe(rxjs.retry({ delay: 2000 }));
++
++            const push$ = new rxjs.Observable((observer) => editor.on("change", (cm, change) => {
++                if (change.origin === "remote") return;
++                observer.next(change);
++            })).pipe(
++                rxjs.buffer(rxjs.interval(500)),
++                rxjs.filter((changes) => changes.length > 0),
++                rxjs.concatMap((changes) => ajax({
++                    url: forwardURLParams("api/codemirror/push?path=" + path, ["share"]),
++                    method: "POST",
++                    body: JSON.stringify({
++                        changes: changes.map(({ from, to, text, removed }) => ({
++                            from, to, text, removed,
++                            clientID,
++                        })),
++                    }),
++                    headers: { "Content-Type": "application/json" },
++                })),
++                rxjs.retry({ delay: 2000 }),
++            );
++
++            return rxjs.merge(pull$, push$);
++        }),
++    ));
++
+     // feature5: save on exit

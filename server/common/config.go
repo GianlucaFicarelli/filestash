@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/user"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -65,7 +66,7 @@ func NewConfiguration() Configuration {
 				Title: "general",
 				Elmnts: []FormElement{
 					FormElement{Name: "name", Type: "text", Default: APPNAME, Description: "Name as shown in the UI", Placeholder: "Default: \"" + APPNAME + "\""},
-					FormElement{Name: "port", Type: "number", Default: 8334, Description: "Port on which the application is available.", Placeholder: "Default: 8334"},
+					FormElement{Name: "port", Type: "number", Default: defaultValue(8334, "FILESTASH_PORT"), Description: "Port on which the application is available.", Placeholder: "Default: 8334"},
 					FormElement{Name: "host", Type: "text", Description: "The host people need to use to access this server", Placeholder: WhiteLabelText("Eg: \"demo.filestash.app\"", "Eg: \"files.yourcompany.com\"")},
 					FormElement{Name: "secret_key", Type: "password", Required: true, Pattern: "[a-zA-Z0-9]{16}", Description: "The key that's used to encrypt and decrypt content. Update this settings will invalidate existing user sessions and shared links, use with caution!"},
 					FormElement{Name: "force_ssl", Type: "boolean", Description: "Enable the web security mechanism called 'Strict Transport Security'"},
@@ -73,6 +74,7 @@ func NewConfiguration() Configuration {
 					FormElement{Name: "logout", Type: "text", Default: "", Description: "Redirection URL whenever user click on the logout button"},
 					FormElement{Name: "display_hidden", Type: "boolean", Default: false, Description: "Should files starting with a dot be visible by default?"},
 					FormElement{Name: "refresh_after_upload", Type: "boolean", Default: false, Description: "Refresh directory listing after upload"},
+					FormElement{Name: "open_mode", Type: "select", Default: "single_click", Opts: []string{"single_click", "double_click"}, Description: "How files and folders are opened in the file browser"},
 					FormElement{Name: "upload_button", Type: "boolean", Default: false, Description: "Display the upload button on any device"},
 					FormElement{Name: "upload_pool_size", Type: "number", Default: 15, Description: "Maximum number of files upload in parallel. Default: 15"},
 					FormElement{Name: "upload_chunk_size", Type: "number", Default: 0, Description: "Size of Chunks for Uploads in MB."},
@@ -228,7 +230,7 @@ func flattenJSON(prefix string, m map[string]any) map[string]any {
 			for nk, nv := range flattenJSON(key, val) {
 				out[nk] = nv
 			}
-		case []any, nil:
+		case []any:
 		default:
 			out[key] = val
 		}
@@ -303,6 +305,8 @@ func (this *Configuration) Export() interface{} {
 		Origin                  string            `json:"origin"`
 		Version                 string            `json:"version"`
 		EnableChromecast        bool              `json:"enable_chromecast"`
+		OpenMode                string            `json:"open_mode"`
+		EnableSearch            bool              `json:"enable_search"`
 		EnableShare             bool              `json:"enable_share"`
 		EnableTags              bool              `json:"enable_tags"`
 	}{
@@ -348,8 +352,10 @@ func (this *Configuration) Export() interface{} {
 			}
 			return scheme + host
 		}(),
+		OpenMode:         this.Get("general.open_mode").String(),
 		Version:          BUILD_REF,
 		EnableChromecast: this.Get("features.protection.enable_chromecast").Bool(),
+		EnableSearch:     Hooks.Get.SearchEngine() != nil,
 		EnableShare:      this.Get("features.share.enable").Bool(),
 		EnableTags:       Hooks.Get.Metadata() != nil,
 	}
@@ -497,9 +503,20 @@ func (this *Configuration) MarshalJSON() ([]byte, error) {
 	})}.MarshalJSON()
 }
 
-func defaultValue(dval string, envName string) string {
+func defaultValue[T string | int | bool](dval T, envName string) T {
 	if val := os.Getenv(envName); val != "" {
-		return val
+		switch any(dval).(type) {
+		case int:
+			if n, err := strconv.Atoi(val); err == nil {
+				return any(n).(T)
+			}
+		case bool:
+			if b, err := strconv.ParseBool(val); err == nil {
+				return any(b).(T)
+			}
+		default:
+			return any(val).(T)
+		}
 	}
 	return dval
 }

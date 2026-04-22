@@ -358,6 +358,7 @@ var preload = [][]string{
 		"/assets/" + BUILD_REF + "/pages/connectpage/model_config.js",
 		"/assets/" + BUILD_REF + "/pages/connectpage/ctrl_form_state.js",
 
+		"/assets/" + BUILD_REF + "/pages/filespage/cache.js",
 		"/assets/" + BUILD_REF + "/pages/filespage/thing.js",
 		"/assets/" + BUILD_REF + "/pages/filespage/thing.css",
 	},
@@ -365,13 +366,13 @@ var preload = [][]string{
 		"/assets/" + BUILD_REF + "/pages/ctrl_filespage.js",
 		"/assets/" + BUILD_REF + "/pages/ctrl_filespage.css",
 		"/assets/" + BUILD_REF + "/pages/filespage/model_acl.js",
-		"/assets/" + BUILD_REF + "/pages/filespage/cache.js",
 		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_filesystem.js",
 		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_filesystem.css",
 		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_upload.js",
 		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_upload.css",
 		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_newitem.js",
 		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_newitem.css",
+		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_move.js",
 	},
 	{
 		"/assets/" + BUILD_REF + "/pages/filespage/ctrl_submenu.js",

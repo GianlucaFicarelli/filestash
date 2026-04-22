@@ -10,6 +10,7 @@ import componentFilesystem, { init as initFilesystem } from "./filespage/ctrl_fi
 import componentSubmenu, { init as initSubmenu } from "./filespage/ctrl_submenu.js";
 import componentNewItem, { init as initNewItem } from "./filespage/ctrl_newitem.js";
 import componentUpload, { init as initUpload } from "./filespage/ctrl_upload.js";
+import componentMove from "./filespage/ctrl_move.js";
 import { init as initState } from "./filespage/state_config.js";
 import { init as initThing } from "./filespage/thing.js";
 
@@ -43,7 +44,10 @@ export default WithShell(function(render) {
     // feature4: render the upload button
     componentUpload(createRender(qs($page, "[is=\"component_upload\"]")));
 
-    // feature5: accessibility / skip links
+    // feature5: move accross windows
+    componentMove();
+
+    // feature6: accessibility / skip links
     const $skip = createElement(`<a aria-role="navigation" href="#main">${t("Skip to content")}</a>`);
     $skip.onclick = (e) => {
         e.preventDefault();

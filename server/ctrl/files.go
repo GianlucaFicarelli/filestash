@@ -609,7 +609,7 @@ func FileSave(ctx *App, res http.ResponseWriter, req *http.Request) {
 				return
 			} else if parts[0] == "sha1" {
 				hash = sha1.New()
-			} else if parts[1] == "crc32" {
+			} else if parts[0] == "crc32" {
 				hash = crc32.NewIEEE()
 			} else {
 				SendErrorResult(res, NewError("Bad Request", 400))
@@ -898,7 +898,7 @@ func FileDownloader(ctx *App, res http.ResponseWriter, req *http.Request) {
 	start := time.Now()
 	var addToZipRecursive func(*App, *zip.Writer, string, string, *[]string) error
 	addToZipRecursive = func(c *App, zw *zip.Writer, backendPath string, zipRoot string, errList *[]string) (err error) {
-		if time.Now().Sub(start) > time.Duration(zip_timeout())*time.Second {
+		if time.Since(start) > time.Duration(zip_timeout())*time.Second {
 			Log.Debug("downloader::timeout zip not completed due to timeout")
 			return ErrTimeout
 		}

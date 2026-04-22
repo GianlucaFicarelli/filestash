@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"os"
-	"sync"
+	"os/signal"
+	"syscall"
 
-	"github.com/gorilla/mux"
-	"github.com/mickael-kerjean/filestash"
+	embed "github.com/mickael-kerjean/filestash"
 	"github.com/mickael-kerjean/filestash/server"
+	. "github.com/mickael-kerjean/filestash/server/common"
 	"github.com/mickael-kerjean/filestash/server/ctrl"
 	"github.com/mickael-kerjean/filestash/server/model"
 
@@ -14,6 +16,8 @@ import (
 	_ "github.com/mickael-kerjean/filestash/server/pkg"
 	"github.com/mickael-kerjean/filestash/server/pkg/workflow"
 	_ "github.com/mickael-kerjean/filestash/server/plugin"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -26,7 +30,7 @@ func Run(router *mux.Router) {
 	check(workflow.Init(), "Worklow Initialisation failure. err=%s")
 	check(model.PluginDiscovery(), "Plugin Discovery failed. err=%s")
 	check(ctrl.InitPluginList(embed.EmbedPluginList, model.PLUGINS), "Plugin Initialisation failed. err=%s")
-	if len(Hooks.Get.Starter()) == 0 {
+	if Hooks.Get.Starter() == nil {
 		check(ErrNotFound, "Missing starter plugin. err=%s")
 	}
 	for _, fn := range Hooks.Get.Onload() {
@@ -41,15 +45,10 @@ func Run(router *mux.Router) {
 		server.DebugRoutes(router)
 	}
 	server.CatchAll(router)
-	var wg sync.WaitGroup
-	for _, obj := range Hooks.Get.Starter() {
-		wg.Add(1)
-		go func() {
-			obj(router)
-			wg.Done()
-		}()
+	Hooks.Get.Starter()(withSignal(), router)
+	for _, fn := range Hooks.Get.OnQuit() {
+		fn()
 	}
-	wg.Wait()
 }
 
 func check(err error, msg string) {
@@ -58,4 +57,15 @@ func check(err error, msg string) {
 	}
 	Log.Error(msg, err.Error())
 	os.Exit(1)
+}
+
+func withSignal() context.Context {
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+		<-quit
+		cancel()
+	}()
+	return ctx
 }
